@@ -4,6 +4,22 @@ import { Link } from "react-router-dom";
 
 function ListBeer() {
   const [beers, setBeers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    axios.get(`https://ih-beers-api2.herokuapp.com/beers/search?q=${searchTerm}`)
+      .then((result) => {
+        console.log(result.data);
+        setBeers(result.data);
+      })
+  }
+
+
+
+
 
   useEffect(() => {
 
@@ -21,6 +37,12 @@ function ListBeer() {
     return (
       <div>
         <h2>All Beers</h2>
+
+        <form onSubmit={handleSearchSubmit}>
+          <label>Filer:</label>
+          <input type='text' name="searchTerm" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}></input>
+          <button type="submit">Search</button>
+        </form>
 
         {
           beers.length ?
